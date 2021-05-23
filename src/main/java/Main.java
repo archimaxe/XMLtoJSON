@@ -15,6 +15,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.*;
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Main {
@@ -22,9 +23,11 @@ public class Main {
         String[] columnMapping = {"id", "firstName", "lastName", "country", "age"};
         String fileName = "data.xml";
 
-//        List<Employee> emps = parseCSV(columnMapping, fileName);
-//        String employs = listToJson(emps);
-//        writeString(employs);
+        List<Employee> emps = parseXml("data.xml");
+        String employs = listToJson(emps);
+        writeString(employs);
+
+
 
     }
 
@@ -59,6 +62,7 @@ public class Main {
 
     public static List<Employee> parseXml(String fileName){
         File xmlFile = new File(fileName);
+        List<Employee> workerList = new ArrayList<>();
         if (xmlFile.exists()) {
             try {
                 /** DOM XML пapcep читaeт coдepжимoe XML фaйлa и зaгpyжaeт его в oпepaтивнyю
@@ -80,7 +84,17 @@ public class Main {
                     /** Используя метод getNodeType(), можно узнать тип узла */
                     if (Node.ELEMENT_NODE == node.getNodeType()){
                         Element employee = (Element) node;
-                        //TODO
+
+                        /** Узлы можно найти по их тагу с помощью метода getElementsByTagName() */
+                        String stringId = employee.getElementsByTagName("id").item(0).getTextContent();
+                        long id = Integer.parseInt(stringId);
+                        String firstName = employee.getElementsByTagName("firstName").item(0).getTextContent();
+                        String lastName = employee.getElementsByTagName("lastName").item(0).getTextContent();
+                        String country = employee.getElementsByTagName("country").item(0).getTextContent();
+                        String stringAge = employee.getElementsByTagName("age").item(0).getTextContent();
+                        int age = Integer.parseInt(stringAge);
+                        Employee worker = new Employee(id, firstName, lastName, country, age);
+                        workerList.add(worker);
                     }
                 }
 
@@ -88,7 +102,7 @@ public class Main {
                 e.printStackTrace();
             }
         }
-        return null;
+        return workerList;
     }
 
     /** Полученный список преобразуем в строчку в формате JSON - Конвертируем объект созданного класса в JSON при помощи метода toJson()  */
