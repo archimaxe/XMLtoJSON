@@ -20,15 +20,11 @@ import java.util.List;
 
 public class Main {
     public static void main(String[] args) throws Exception{
-        String[] columnMapping = {"id", "firstName", "lastName", "country", "age"};
+//        String[] columnMapping = {"id", "firstName", "lastName", "country", "age"};
         String fileName = "data.xml";
-
-        List<Employee> emps = parseXml("data.xml");
+        List<Employee> emps = parseXml(fileName);
         String employs = listToJson(emps);
         writeString(employs);
-
-
-
     }
 
     // Получаем список сотрудников:
@@ -121,7 +117,6 @@ public class Main {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
 }
 
